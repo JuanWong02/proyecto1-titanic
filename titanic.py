@@ -12,8 +12,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 
 
-
-
 #Importar la información de los archivos CSV
 
 df_train = pd.read_csv('train.csv')
@@ -22,8 +20,8 @@ df_test = pd.read_csv('test.csv')
 # Analizar los datos de los archivos para ver como "acomodarlos" para que funcione bien la clasificacion.
 
 #Ver los primeros 3 de cada archivo para ver que secciones tienen
-#print(df_train.head(3))
-#print(df_test.head(3))
+# print(df_train.head(3))
+# print(df_test.head(3))
 
 #Tipos de datos que tienen los archivos
 #print(df_train.info())
@@ -46,19 +44,15 @@ df_train['Embarked'].replace(['Q','S','C'], [0,1,2], inplace=True)
 df_test['Embarked'].replace(['Q','S','C'], [0,1,2], inplace=True)
 
 #Existen datos faltantes en la edad, asi que pondremos la media de edad.
-#print(df_train['Age'].mean())
-#print(df_test['Age'].mean())
+promedio = (( (df_train['Age'].mean()) + (df_test['Age'].mean()) ) / 2).round()
+promedio = int(promedio)
+#print(promedio)
 
-promedio = 30
 
 #Se cambia los nan por el valor del promedio
 df_train['Age'] = df_train['Age'].replace(np.nan, promedio)
 df_test['Age'] = df_test['Age'].replace(np.nan, promedio)
 
-#Ver los puntos que puden tener más correlacion con Survived
-most_correlated = df_train.corr()['Survived'].abs().sort_values(ascending=False)
-
-#print(most_correlated)
 
 #Muestra una grafica para saber de que edades sobrevivieron
 a = sns.FacetGrid(df_train, col='Survived')
@@ -95,10 +89,10 @@ all_data = [df_train, df_test]
 
 #La columna Fare se reduce a 4 opciones para no tener muchas opciones diferentes
 df_test['Fare'].fillna(df_test['Fare'].dropna().median(), inplace=True)
-print(df_test.head())
+#print(df_test.head())
 
 df_train['FareBand'] = pd.qcut(df_train['Fare'],4)
-print(df_train[['FareBand','Survived']].groupby(['FareBand'], as_index=False).mean().sort_values(by='FareBand',ascending=True))
+#print(df_train[['FareBand','Survived']].groupby(['FareBand'], as_index=False).mean().sort_values(by='FareBand',ascending=True))
 
 for dataset in all_data:
     dataset.loc[dataset['Fare'] <= 7.91, 'Fare'] = 0
@@ -108,7 +102,7 @@ for dataset in all_data:
     dataset['Fare'] = dataset['Fare'].astype(int)
 
 df_train = df_train.drop(['FareBand'],axis=1)
-all_data = [df_train, df_test]
+
 
 
 
@@ -121,10 +115,12 @@ df_test = df_test.drop(['Ticket','Cabin'], axis=1)
 #print(df_test.head(10))
 
 #Extraemos titulos personales para correlacionarlos con supervivencia
-for dataset in all_data:
-    dataset['Title'] = dataset.Name.str.extract(' ([A-Za-z]+)\.', expand=False)
+df_train['Title'] = df_train.Name.str.extract(' ([A-Za-z]+)\.', expand=False)
+df_test['Title'] = df_test.Name.str.extract(' ([A-Za-z]+)\.', expand=False)
 
 #print(pd.crosstab(df_train['Title'], df_train['Sex']))
+
+all_data = [df_train, df_test]
 
 #Se reemplazan titulos con un nombre mas comun o clasificarlos como raros
 
@@ -145,24 +141,26 @@ for dataset in all_data:
 
 #print(df_train.head())
 
-#Se elimina PassangerId y Name
+# #Se elimina PassangerId y Name
 df_train = df_train.drop(['Name', 'PassengerId'], axis=1)
 df_test = df_test.drop(['Name'],axis=1)
 all_data = [df_train, df_test]
 #print(df_train.shape, df_test.shape)
 
-#Se crean grupos de edad en base a bandas de las edades
+
+
+# #Se crean grupos de edad en base a bandas de las edades
 # 0-8 , 9-15, 16-18, 19-25, 26-40, 41-60, 61-100
 bins = [0, 8, 15, 18, 25, 40, 60, 100]
 names= ['1','2','3','4','5','6','7']
 df_train['Age'] = pd.cut(df_train['Age'], bins, labels = names)
 df_test['Age'] = pd.cut(df_test['Age'],bins, labels = names)
 
-#Eliminar filas con datos vacios
+# #Eliminar filas con datos vacios
 df_train.dropna(axis=0, how='any', inplace=True)
 df_test.dropna(axis=0, how='any', inplace=True)
 
-#Verificar los datos
+# #Verificar los datos
 # print(pd.isnull(df_train).sum())
 # print(pd.isnull(df_test).sum())
 
@@ -172,18 +170,18 @@ df_test.dropna(axis=0, how='any', inplace=True)
 # print(df_test.head())
 # print(df_train.head())
 
-#Separar la columna con la informacion de los sobrevivientes
-X = np.array(df_train.drop(['Survived'], 1))
+# #Separar la columna con la informacion de los sobrevivientes
+X = np.array(df_train.drop(['Survived'], axis=1))
 y = np.array(df_train['Survived'])
 
 
-#Separar los datos de train en entrenamiento y prueba para probar los algoritmos
-X_train = df_train.drop("Survived",axis=1)
+# #Separar los datos de train en entrenamiento y prueba para probar los algoritmos
+X_train = np.array(df_train.drop("Survived",axis=1))
 y_train = df_train["Survived"]
-X_test = df_test.drop("PassengerId",axis=1).copy()
-print(X_train.shape, y_train.shape, X_test.shape)
+X_test = np.array(df_test.drop("PassengerId",axis=1).copy())
+# print(X_train.shape, y_train.shape, X_test.shape)
 
-#REGRESION LOGISTICA
+# #REGRESION LOGISTICA
 logreg = LogisticRegression()
 #Se entrena
 logreg.fit(X_train, y_train)
@@ -191,7 +189,7 @@ logreg.fit(X_train, y_train)
 y_pred_logreg = logreg.predict(X_test)
 print('Regresión Logistica: %.2f' % logreg.score(X_train, y_train))
 
-#SVC (SUPPORT VECTOR MACHINES)
+# #SVC (SUPPORT VECTOR MACHINES)
 svc = SVC()
 #Entrenar
 svc.fit(X_train, y_train)
@@ -199,7 +197,7 @@ svc.fit(X_train, y_train)
 y_pred_svc = svc.predict(X_test)
 print('SVC: %.2f' % svc.score(X_train, y_train))
 
-#K NEIGHBORS
+# #K NEIGHBORS
 knn = KNeighborsClassifier()
 #Entrenar
 knn.fit(X_train, y_train)
@@ -207,7 +205,7 @@ knn.fit(X_train, y_train)
 y_pred_knn = knn.predict(X_test)
 print('K Neighbors: %.2f' % knn.score(X_train, y_train))
 
-#DECISION TREE
+# #DECISION TREE
 dt = DecisionTreeClassifier()
 #Entrenar
 dt.fit(X_train, y_train)
@@ -215,7 +213,7 @@ dt.fit(X_train, y_train)
 y_pred_dt = dt.predict(X_test)
 print('Decision Tree: %.2f' % dt.score(X_train, y_train))
 
-#RANDOM FOREST
+# #RANDOM FOREST
 rf = RandomForestClassifier()
 #Entrenar
 rf.fit(X_train, y_train)
@@ -223,10 +221,7 @@ rf.fit(X_train, y_train)
 y_pred_rf = rf.predict(X_test)
 print('Random Forest: %.2f' % rf.score(X_train, y_train))
 
-#Prediccion utilizando los modelos
-
-# ids = df_test['PassengerId']
-
+# #Prediccion utilizando los modelos
 test = pd.read_csv('test.csv')
 result = pd.DataFrame({
     "PassengerId": test["PassengerId"],
@@ -235,7 +230,7 @@ result = pd.DataFrame({
 })
 result.to_csv('result.csv', index=False)
 
-#sns.heatmap(df_train.corr(), annot = True, cmap='jet')
+
 
 
 
