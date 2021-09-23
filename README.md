@@ -71,13 +71,19 @@
 ![](https://github.com/JuanWong02/proyecto1-titanic/blob/master/images/24.JPG)
 
 
-### Sleccionamos los modelos que probaremos, en este caso son: regresion logistica, svc, kneighbors, decision tree y random forest
+### Seleccionamos los modelos que probaremos, en este caso son: regresion logistica, svc, kneighbors, decision tree y random forest
 ![](https://github.com/JuanWong02/proyecto1-titanic/blob/master/images/26.JPG)
 
-### Estos son los resultados de los modelos, podemos observar que el desicion tree y random forest fueron los mejores, asi que seleccionare el desicion tree para predecir la supervivencia
+### Estos son los resultados de los modelos, pero esto es sin hacer cross validation.
 ![](https://github.com/JuanWong02/proyecto1-titanic/blob/master/images/25.JPG)
 
-### Cree un archivo con los resultados usando el desicion tree, en el cual me dice que id de pasajero y su sobrevivio o no.
+### Agregue esta linea para hacer cross-validation utilizando diez resultados, despues sacando su media y por ultimo redondeando a solo dos decimales
+![](https://github.com/JuanWong02/proyecto1-titanic/blob/master/images/29.JPG)
+
+### Como podemos observar la mayoria obtuvieron resultados similares, por el redondeo, hice más pruebas y en algunas ocaciones salian con puntaje más bajo excepto el Random Forest, por lo cual utilizare este modelo para hacer la predicción.
+![](https://github.com/JuanWong02/proyecto1-titanic/blob/master/images/28.JPG)
+
+### Cree un archivo con los resultados usando el Random Forest, en el cual me dice que id de pasajero y si sobrevivio o no.
 ![](https://github.com/JuanWong02/proyecto1-titanic/blob/master/images/27.JPG)
 
 
