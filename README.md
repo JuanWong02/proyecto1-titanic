@@ -86,5 +86,8 @@
 ### Cree un archivo con los resultados usando el Random Forest, en el cual me dice que id de pasajero y si sobrevivio o no.
 ![](https://github.com/JuanWong02/proyecto1-titanic/blob/master/images/27.JPG)
 
+##### Como conclusión podemos llegar a que este dataset si tenia datos importantes como la edad, sexo, si tenia familia e incluso la tarifa o sus nombres, pues aunque no lo parezca desde mi punto de vista si son relevantes, ya que con la tarifa se puede determinar que si pagaron más, estuvieron en primera clase, donde fueron los que más se salvaron
+asi como sus nombres, no como tal sino como titulo para determinar si pudieran tener algun cargo importante y estar en alguna clase o relacionarlo por su sexo, estos datos junto con los otros de una forma optimizada y lo más simple posible se puede hacer la predicción de los sobrevivientes del titanic.
+
 
 
