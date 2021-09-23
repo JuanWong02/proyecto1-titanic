@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
@@ -181,54 +181,80 @@ y_train = df_train["Survived"]
 X_test = np.array(df_test.drop("PassengerId",axis=1).copy())
 # print(X_train.shape, y_train.shape, X_test.shape)
 
+
 # #REGRESION LOGISTICA
 logreg = LogisticRegression()
+#Se hace cross validation cinco veces,se obtiene su media y se redondea
+cross_v_logreg = (cross_val_score(logreg, X, y, cv=10).mean().round(2))
 #Se entrena
 logreg.fit(X_train, y_train)
 #Precision
 y_pred_logreg = logreg.predict(X_test)
-print('Regresión Logistica: %.2f' % logreg.score(X_train, y_train))
+print('Regresión Logistica: %.2f' % cross_v_logreg)
+
 
 # #SVC (SUPPORT VECTOR MACHINES)
 svc = SVC()
+#Se hace cross validation cinco veces,se obtiene su media y se redondea
+cross_v_svc = cross_val_score(svc, X, y, cv=10).mean().round(2)
+#Se entrena
 #Entrenar
 svc.fit(X_train, y_train)
 #Precision
 y_pred_svc = svc.predict(X_test)
-print('SVC: %.2f' % svc.score(X_train, y_train))
+print('SVC: %.2f' % cross_v_svc)
 
 # #K NEIGHBORS
 knn = KNeighborsClassifier()
+#Se hace cross validation cinco veces,se obtiene su media y se redondea
+cross_v_knn = cross_val_score(knn, X, y, cv=10).mean().round(2)
 #Entrenar
 knn.fit(X_train, y_train)
 #Precision
 y_pred_knn = knn.predict(X_test)
-print('K Neighbors: %.2f' % knn.score(X_train, y_train))
+print('K Neighbors: %.2f' % cross_v_knn )
 
 # #DECISION TREE
 dt = DecisionTreeClassifier()
+#Se hace cross validation cinco veces,se obtiene su media y se redondea
+cross_v_dt = cross_val_score(dt, X, y, cv=10).mean().round(2)
 #Entrenar
 dt.fit(X_train, y_train)
 #Precision
 y_pred_dt = dt.predict(X_test)
-print('Decision Tree: %.2f' % dt.score(X_train, y_train))
+print('Decision Tree: %.2f' % cross_v_dt)
 
 # #RANDOM FOREST
 rf = RandomForestClassifier()
+#Se hace cross validation cinco veces,se obtiene su media y se redondea
+cross_v_rf = cross_val_score(rf, X, y, cv=10).mean().round(2)
 #Entrenar
 rf.fit(X_train, y_train)
 #Precision
 y_pred_rf = rf.predict(X_test)
-print('Random Forest: %.2f' % rf.score(X_train, y_train))
+print('Random Forest: %.2f' % cross_v_rf)
 
 # #Prediccion utilizando los modelos
 test = pd.read_csv('test.csv')
 result = pd.DataFrame({
     "PassengerId": test["PassengerId"],
-    "Survived": y_pred_dt
+    "Survived": y_pred_rf
 
 })
 result.to_csv('result.csv', index=False)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
