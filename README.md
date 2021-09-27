@@ -1,5 +1,7 @@
 # Prediccion Sobrevivientes Titanic con Machine Learning (Proyecto)
 
+Este es un proyecto en el cual mediante machine learning podremos predecir los supervivientes del Titanic, en este ejemplo se hace la prueba con cinco modelos diferentes, a continuación cada parte de este proyecto.
+
 ## Para comenzar con este proyecto, importamos las librerias que utilizaremos para hacer la predicción.
 
 ![Alt Text](https://github.com/JuanWong02/proyecto1-titanic/blob/master/images/1.JPG)
